@@ -5,7 +5,7 @@ class RequestCard extends StatelessWidget {
   final Request request;
   final TextStyle boldStyle;
 
-  RequestCard({Key? key, required this.request, required this.boldStyle}) :
+  const RequestCard({Key? key, required this.request, required this.boldStyle}) :
       super(key: key);
 
   @override
@@ -18,8 +18,9 @@ class RequestCard extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 8.0,
-                  horizontal: 16.0),
-        child: Text(request.title, style: boldStyle),
+                  horizontal: 16.0
+                ),
+                child: Text(request.title, style: boldStyle),
               )
             )
           ]

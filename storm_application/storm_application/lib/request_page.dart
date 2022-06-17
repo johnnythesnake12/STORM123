@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:storm_application/repository/data_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:storm_application/request_card.dart';
+import 'add_request_dialog.dart';
 import 'request.dart';
 
 class RequestPage extends StatefulWidget {
@@ -37,6 +38,7 @@ class _RequestPageState extends State<RequestPage> {
           _addRequest();
         },
         tooltip: "Add Request",
+        child: const Icon(Icons.add)
       ),
     );
   }
@@ -59,7 +61,9 @@ class _RequestPageState extends State<RequestPage> {
       context: context,
       builder: (BuildContext context) {
         return const AddRequestDialog();
-      }
+      },
     );
   }
+// AddRequestDialog() will call function located in add_request_dialog.dart,
+// which will add a request to the list
 }
