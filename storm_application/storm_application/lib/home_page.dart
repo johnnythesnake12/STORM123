@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:storm_application/request_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -19,10 +20,10 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Home screen
-            Text("Welcome back! ",
+            Text("Home Screen",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 34,
+                fontSize: 28,
               ),
             ),
 
@@ -30,58 +31,27 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 5),
 
             // Signed in as: [user email]
-            Text('Where would you like to navigate to?'),
+            Text('Signed in as: ' + user.email!),
 
             // Spacer box
             SizedBox(height: 15),
 
+            MaterialButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const RequestPage()),
+                );
+              },
+              color: Colors.deepPurple,
+              child: Text("Request Page",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+
             // Sign out button
-            MaterialButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              color: Colors.indigo,
-              child: Text("Post",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-
-            MaterialButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              color: Colors.indigo,
-              child: Text("Activity",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-
-            MaterialButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              color: Colors.indigo,
-              child: Text("Chats",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            MaterialButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              color: Colors.indigo,
-              child: Text("Profile",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
             MaterialButton(
               onPressed: () {
                 FirebaseAuth.instance.signOut();
@@ -92,7 +62,7 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.white,
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),
