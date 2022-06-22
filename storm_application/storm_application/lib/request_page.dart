@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:storm_application/repository/data_repository.dart';
+import 'package:storm_application/request_implementation/request_data_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:storm_application/request_card.dart';
-import 'add_request_dialog.dart';
-import 'request.dart';
+import 'package:storm_application/request_implementation/request.dart';
+import 'package:storm_application/request_implementation/request_card.dart';
+import 'request_implementation/add_request_dialog.dart';
 
 class RequestPage extends StatefulWidget {
   const RequestPage({Key? key}) : super(key: key);
@@ -13,7 +13,7 @@ class RequestPage extends StatefulWidget {
 }
 
 class _RequestPageState extends State<RequestPage> {
-  final DataRepository repository = DataRepository();
+  final RequestDataRepository repository = RequestDataRepository();
   final boldStyle = const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold);
 
   @override
@@ -24,6 +24,7 @@ class _RequestPageState extends State<RequestPage> {
   Widget _buildRequestList(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.indigo,
         title:const Text("Request List"),
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -34,6 +35,7 @@ class _RequestPageState extends State<RequestPage> {
         }
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.indigo,
         onPressed: () {
           _addRequest();
         },
@@ -64,6 +66,6 @@ class _RequestPageState extends State<RequestPage> {
       },
     );
   }
-// AddRequestDialog() will call function located in add_request_dialog.dart,
+// AddRequestDialog() will call function located in add_offer_dialog.dart,
 // which will add a request to the list
 }

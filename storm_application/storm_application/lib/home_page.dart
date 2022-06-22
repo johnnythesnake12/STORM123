@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Home screen
-            Text("Home Screen",
+            const Text("Home Screen",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 28,
@@ -28,13 +28,13 @@ class _HomePageState extends State<HomePage> {
             ),
 
             // Spacer box
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
 
             // Signed in as: [user email]
             Text('Signed in as: ' + user.email!),
 
             // Spacer box
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
 
             MaterialButton(
               onPressed: () {
@@ -43,8 +43,8 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => const RequestPage()),
                 );
               },
-              color: Colors.deepPurple,
-              child: Text("Request Page",
+              color: Colors.indigo,
+              child: const Text("Request Page",
                 style: TextStyle(
                   color: Colors.white,
                 ),
@@ -56,8 +56,8 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 FirebaseAuth.instance.signOut();
               },
-              color: Colors.indigo,
-              child: Text("Sign Out",
+              color: Colors.deepPurple,
+              child: const Text("Sign Out",
                 style: TextStyle(
                   color: Colors.white,
                 ),
