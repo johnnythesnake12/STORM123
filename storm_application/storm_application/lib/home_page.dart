@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:storm_application/contacts_page.dart';
+import 'package:storm_application/offer_page.dart';
 import 'package:storm_application/request_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,6 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final user = FirebaseAuth.instance.currentUser!;
+  CollectionReference users = FirebaseFirestore.instance.collection('users');
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +24,19 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Home screen
-            const Text("Home Screen",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 28,
+            Flexible(
+              child: FutureBuilder<DocumentSnapshot>(
+                future: users.doc(FirebaseAuth.instance.currentUser?.uid).get(),
+                  builder: (
+                      BuildContext context,
+                      AsyncSnapshot<DocumentSnapshot> snapshot) {
+                        Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                        return Text("Welcome, ${data['firstName']} ${data['lastName']}!",
+                          style: const TextStyle(
+                            fontWeight:FontWeight.bold,
+                            fontSize: 28
+                          ));
+                      }
               ),
             ),
 
@@ -31,10 +44,10 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 5),
 
             // Signed in as: [user email]
-            Text('Signed in as: ' + user.email!),
+            Text("(" + user.email! + ")"),
 
             // Spacer box
-            const SizedBox(height: 15),
+            const SizedBox(height: 30),
 
             MaterialButton(
               onPressed: () {
@@ -45,6 +58,36 @@ class _HomePageState extends State<HomePage> {
               },
               color: Colors.indigo,
               child: const Text("Request Page",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+
+            MaterialButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const OfferPage()),
+                );
+              },
+              color: Colors.lightBlue,
+              child: const Text("Offers Page",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+
+            MaterialButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ContactsPage()),
+                );
+              },
+              color: Colors.green,
+              child: const Text("Contacts Page",
                 style: TextStyle(
                   color: Colors.white,
                 ),

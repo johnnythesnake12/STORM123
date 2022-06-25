@@ -1,3 +1,5 @@
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +12,8 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
   final _passwordController= TextEditingController();
   final _passwordConfirmController = TextEditingController();
 
@@ -35,11 +39,19 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future signUp() async {
     if (_passwordController.text.trim() == _passwordConfirmController.text.trim()) {
-      await FirebaseAuth
+      var credential = await FirebaseAuth
           .instance
           .createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim());
+
+      await FirebaseChatCore.instance.createUserInFirestore(
+        types.User(
+          firstName: _firstNameController.text.trim(),
+          lastName: _lastNameController.text.trim(),
+          id: credential.user!.uid
+        ),
+      );
 
       ScaffoldMessenger.of(context).showSnackBar(signupSuccessSnackBar);
     } else {
@@ -50,7 +62,10 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   void dispose() {
     _emailController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
     _passwordController.dispose();
+    _passwordConfirmController.dispose();
     super.dispose();
   }
 
@@ -65,7 +80,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Sign up for STORM
-                  Text(
+                  const Text(
                     "Sign up for STORM",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -74,10 +89,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
 
                   // Spacer box
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Please enter your information below
-                  Text(
+                  const Text(
                     "Please enter your information below",
                     style: TextStyle(
                       fontSize: 16,
@@ -85,7 +100,53 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
 
                   // Spacer box
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: TextField(
+                      controller: _firstNameController,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.indigo),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        hintText: "First Name",
+                        fillColor: Colors.grey[200],
+                        filled: true,
+                      ),
+                    ),
+                  ),
+
+                  // Spacer box
+                  const SizedBox(height: 10),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: TextField(
+                      controller: _lastNameController,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.indigo),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        hintText: "Last Name",
+                        fillColor: Colors.grey[200],
+                        filled: true,
+                      ),
+                    ),
+                  ),
+
+                  // Spacer box
+                  const SizedBox(height: 10),
 
                   // Email box
                   Padding(
@@ -94,11 +155,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: _emailController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
+                          borderSide: const BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.indigo),
+                          borderSide: const BorderSide(color: Colors.indigo),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         hintText: "Email",
@@ -109,7 +170,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
 
                   // Spacer box
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Password box
                   Padding(
@@ -118,11 +179,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: _passwordController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
+                          borderSide: const BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.indigo),
+                          borderSide: const BorderSide(color: Colors.indigo),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         hintText: "Password",
@@ -133,7 +194,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
 
                   // Spacer box
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Confirm password box
                   Padding(
@@ -142,11 +203,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       controller: _passwordConfirmController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
+                          borderSide: const BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.indigo),
+                          borderSide: const BorderSide(color: Colors.indigo),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         hintText: "Confirm Password",
@@ -157,7 +218,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
 
                   // Spacer box
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Sign up button
                   Padding(
@@ -165,13 +226,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: GestureDetector(
                       onTap: signUp,
                       child: Container(
-                        padding: EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: Colors.indigo,
                           borderRadius: BorderRadius.circular(12),
                         ),
 
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Sign Up",
                             style: TextStyle(
@@ -186,7 +247,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
 
                   // Spacer box
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // Back to login
                   Row(
@@ -196,7 +257,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        child: Text(
+                        child: const Text(
                             "Back to Login",
                             style: TextStyle(
                               color: Colors.blue,
@@ -209,7 +270,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
 
                   // Spacer box
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                 ]
             ),

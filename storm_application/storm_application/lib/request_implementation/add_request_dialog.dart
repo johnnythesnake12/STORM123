@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:storm_application/request_implementation/request_data_repository.dart';
 import 'package:storm_application/request_implementation/request.dart';
@@ -14,12 +16,29 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
   String? requestDescription;
   String? requestType;
   String? requestDate = DateTime.now().toString();
-  //DateTime requestDate = DateTime.now();
+  String? requestUsername;
 
   final RequestDataRepository repository = RequestDataRepository();
 
   @override
   Widget build(BuildContext context) {
+    /*var thing = FirebaseFirestore.instance.collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {});*/
+
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+    FutureBuilder<DocumentSnapshot> futureBuilder = FutureBuilder<DocumentSnapshot>(
+        future: users.doc(FirebaseAuth.instance.currentUser?.uid).get(),
+        builder:
+        (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+          requestUsername = "${data['firstName']} ${data['lastName']}";
+          return Container(width: 285);
+        }
+    );
+
     return AlertDialog(
       title: const Text("Add Request"),
       content: SingleChildScrollView(
@@ -32,7 +51,7 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
               onChanged: (text) => requestTitle = text,
             ),
 
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
             TextField(
               autofocus: true,
@@ -44,11 +63,11 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
               onChanged: (text) => requestDescription = text,
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             const Text("Request Type:"),
 
-           SizedBox(height: 10),
+           const SizedBox(height: 10),
 
             RadioListTile(
               title: const Text('Tech'),
@@ -89,7 +108,9 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
                   requestType = (value ?? '') as String;
                 });
               },
-            )
+            ),
+
+            futureBuilder
 
           ]
         )
@@ -110,6 +131,7 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
                   title: requestTitle!,
                   description: requestDescription!,
                   category: requestType!,
+                  username: requestUsername!,
                   date: requestDate!);
               repository.addRequest(req);
               Navigator.of(context).pop();

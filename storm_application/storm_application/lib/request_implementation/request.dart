@@ -4,7 +4,7 @@ class Request {
   String title;
   String description;
   String category;
-  //DateTime date;
+  String username;
   String date;
   String? referenceId;
 
@@ -12,6 +12,7 @@ class Request {
     {required this.title,
       required this.description,
       required this.category,
+      required this.username,
       this.referenceId,
       required this.date});
 
@@ -34,6 +35,7 @@ Request _requestFromJson(Map<String, dynamic> json) {
     title: json['title'] as String,
     description: json['description'] as String,
     category: json['category'] as String,
+    username: json['username'] as String,
     date: json['date'] as String
     //date: (json['date'] as Timestamp).toDate()
   );
@@ -44,5 +46,6 @@ Map<String, dynamic> _requestToJson(Request instance) =>
       'title': instance.title,
       'description' : instance.description,
       'category' : instance.category,
+      'username' : instance.username,
       'date': instance.date,
     };
