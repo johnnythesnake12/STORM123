@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -37,6 +37,8 @@ dependencies:
   firebase_core: ^1.17.1
   cloud_firestore: ^3.1.17
   firebase_auth: ^3.3.14
+  flutter_firebase_chat_core: ^1.6.2
+  flutter_chat_ui: ^1.6.2
 
 dev_dependencies:
   flutter_test:
