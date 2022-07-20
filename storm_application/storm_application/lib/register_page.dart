@@ -17,7 +17,57 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passwordController= TextEditingController();
   final _passwordConfirmController = TextEditingController();
 
+  static const firstNameSnackBar = SnackBar(
+    content: Text(
+      "Error: Please enter your first name",
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    ),
+    backgroundColor: Colors.red,
+  );
+
+  static const emailSnackBar = SnackBar(
+    content: Text(
+      "Error: Please enter an email address",
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    ),
+    backgroundColor: Colors.red,
+  );
+
   static const passwordSnackBar = SnackBar(
+    content: Text(
+      "Error: Please enter a password",
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    ),
+    backgroundColor: Colors.red,
+  );
+
+  static const tooShortSnackBar = SnackBar(
+    content: Text(
+      "Error: Password must be at least 6 characters long",
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    ),
+    backgroundColor: Colors.red,
+  );
+
+  static const passwordConfirmSnackBar = SnackBar(
+    content: Text(
+      "Error: Please confirm your password",
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    ),
+    backgroundColor: Colors.red,
+  );
+
+  static const differentPasswordSnackBar = SnackBar(
     content: Text(
       "Error: Passwords do not match",
       style: TextStyle(
@@ -38,7 +88,31 @@ class _RegisterPageState extends State<RegisterPage> {
   );
 
   Future signUp() async {
-    if (_passwordController.text.trim() == _passwordConfirmController.text.trim()) {
+    if (_firstNameController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(firstNameSnackBar);
+    }
+
+    else if (_emailController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(emailSnackBar);
+    }
+
+    else if (_passwordController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(passwordSnackBar);
+    }
+
+    else if (_passwordController.text.trim().length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(tooShortSnackBar);
+    }
+
+    else if (_passwordConfirmController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(passwordConfirmSnackBar);
+    }
+
+    else if (_passwordController.text.trim() != _passwordConfirmController.text.trim()) {
+      ScaffoldMessenger.of(context).showSnackBar(differentPasswordSnackBar);
+    }
+
+    else {
       var credential = await FirebaseAuth
           .instance
           .createUserWithEmailAndPassword(
@@ -47,15 +121,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
       await FirebaseChatCore.instance.createUserInFirestore(
         types.User(
-          firstName: _firstNameController.text.trim(),
-          lastName: _lastNameController.text.trim(),
-          id: credential.user!.uid
+            firstName: _firstNameController.text.trim(),
+            lastName: _lastNameController.text.trim(),
+            id: credential.user!.uid
         ),
       );
 
       ScaffoldMessenger.of(context).showSnackBar(signupSuccessSnackBar);
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(passwordSnackBar);
     }
   }
 

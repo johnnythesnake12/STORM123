@@ -128,7 +128,40 @@ class _AddOfferDialogState extends State<AddOfferDialog> {
 
           TextButton(
               onPressed: () {
-                if (offerTitle != null && offerDescription != null && offerType != null) {
+                if (offerTitle == null) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const AlertDialog(
+                          content: Text("Error: Please enter a title for your offer.", style: TextStyle(color: Colors.red)),
+                        );
+                      }
+                  );
+                }
+
+                else if (offerDescription == null) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const AlertDialog(
+                          content: Text("Error: Please enter a description of your offer.", style: TextStyle(color: Colors.red)),
+                        );
+                      }
+                  );
+                }
+
+                else if (offerType == null) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const AlertDialog(
+                          content: Text("Error: Please select a category for your offer.", style: TextStyle(color: Colors.red)),
+                        );
+                      }
+                  );
+                }
+
+                else {
                   final offer = Offer(
                       title: offerTitle!,
                       description: offerDescription!,
@@ -137,6 +170,15 @@ class _AddOfferDialogState extends State<AddOfferDialog> {
                       date: offerDate!);
                   repository.addRequest(offer);
                   Navigator.of(context).pop();
+
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const AlertDialog(
+                          content: Text("Success! Your offer has been posted.", style: TextStyle(color: Colors.green)),
+                        );
+                      }
+                  );
                 }
               },
               child: const Text("Add"))

@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:storm_application/request_details_page.dart';
 import 'package:storm_application/request_implementation/request.dart';
+import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class RequestCard extends StatelessWidget {
   final Request request;
@@ -50,10 +54,33 @@ class RequestCard extends StatelessWidget {
                   ]
                 ),
               ),
-            )
+            ),
+            
+            //_buildDeleteButton() // NEW ADDITION
+            
           ]
         )
       ),
     );
   }
+
+  /*Widget _buildDeleteButton() {
+    // NEW ADDITION
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: GestureDetector(
+        child: FutureBuilder<DocumentSnapshot>(
+          future: users.doc(FirebaseAuth.instance.currentUser?.uid).get(),
+          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+            return const Icon(Icons.delete, color: Colors.red);
+          }
+        ),
+        onTap: () {
+
+        }
+      ),
+    );
+  }*/
 }

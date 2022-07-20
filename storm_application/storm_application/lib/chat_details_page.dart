@@ -29,7 +29,7 @@ class _ChatDetailPageState extends State<ChatDetailsPage> {
         builder: (context, snapshot) => Chat(
           //isAttachmentUploading: _isAttachmentUploading,
           messages: snapshot.data ?? [],
-          //onAttachmentPressed: _handleAtachmentPressed,
+          //onAttachmentPressed: _handleAttachmentPressed,
           //onMessageTap: _handleMessageTap,
           //onPreviewDataFetched: _handlePreviewDataFetched,
           onSendPressed: _handleSendPressed,
