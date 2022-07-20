@@ -10,8 +10,8 @@ import 'package:flutter/material.dart';
 import 'chat_details_page.dart';
 
 class RequestDetailsPage extends StatefulWidget {
-    final Request request;
-    const RequestDetailsPage({Key? key, required this.request}) : super(key: key);
+  final Request request;
+  const RequestDetailsPage({Key? key, required this.request}) : super(key: key);
 
   @override
   State<RequestDetailsPage> createState() => _RequestDetailsPage();
@@ -23,106 +23,106 @@ class _RequestDetailsPage extends State<RequestDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder<List<types.User>> (
-        stream: FirebaseChatCore.instance.users(),
-        initialData: const [],
-        builder: (context, snapshot) {
-          return Padding(
-            padding: const EdgeInsets.only(top : 50.0),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Home screen
-                  Row(
+        body: StreamBuilder<List<types.User>> (
+            stream: FirebaseChatCore.instance.users(),
+            initialData: const [],
+            builder: (context, snapshot) {
+              return Padding(
+                padding: const EdgeInsets.only(top : 50.0),
+                child: SingleChildScrollView(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(widget.request.title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 28,
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // Spacer box
-                  const SizedBox(height: 5),
-
-                  Text("By User: " + widget.request.username),
-
-                  // Spacer box
-                  const SizedBox(height: 20),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Row(
-                        children: const [
-                          Flexible(
-                              child: Text("Description:",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold
-                                )
-                              )
-                          )
-                        ]
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Row(
-                      children: [
-                        Flexible(
-                          child: Text(widget.request.description)
-                        )
-                      ]
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Row(
+                      // Home screen
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Flexible(
-                              child: Text("Post date: " + widget.request.date,
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    fontStyle: FontStyle.italic
+                          Text(widget.request.title,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 28,
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      // Spacer box
+                      const SizedBox(height: 5),
+
+                      Text("By User: " + widget.request.username),
+
+                      // Spacer box
+                      const SizedBox(height: 20),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                            children: const [
+                              Flexible(
+                                  child: Text("Description:",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold
+                                      )
                                   )
                               )
-                          )
-                        ]
-                    ),
-                  ),
-
-                  const SizedBox(height: 40),
-
-                  _buildButton(snapshot),
-
-                  MaterialButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    color: Colors.indigo,
-                    child: const Text("Back to Request List",
-                      style: TextStyle(
-                        color: Colors.white,
+                            ]
+                        ),
                       ),
-                    ),
-                  )
 
-                ],
-              ),
-            ),
-          );
-        }
-      )
+                      const SizedBox(height: 10),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                            children: [
+                              Flexible(
+                                  child: Text(widget.request.description)
+                              )
+                            ]
+                        ),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                            children: [
+                              Flexible(
+                                  child: Text("Post date: " + widget.request.date,
+                                      style: const TextStyle(
+                                          fontSize: 10,
+                                          fontStyle: FontStyle.italic
+                                      )
+                                  )
+                              )
+                            ]
+                        ),
+                      ),
+
+                      const SizedBox(height: 40),
+
+                      _buildButton(snapshot),
+
+                      MaterialButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        color: Colors.indigo,
+                        child: const Text("Back to Request List",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+
+                    ],
+                  ),
+                ),
+              );
+            }
+        )
     );
   }
 

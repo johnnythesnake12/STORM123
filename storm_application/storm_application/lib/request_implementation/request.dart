@@ -9,12 +9,12 @@ class Request {
   String? referenceId;
 
   Request(
-    {required this.title,
-      required this.description,
-      required this.category,
-      required this.username,
-      this.referenceId,
-      required this.date});
+      {required this.title,
+        required this.description,
+        required this.category,
+        required this.username,
+        this.referenceId,
+        required this.date});
 
   factory Request.fromSnapshot(DocumentSnapshot snapshot) {
     final newRequest = Request.fromJson(snapshot.data() as Map<String, dynamic>);
@@ -32,11 +32,11 @@ class Request {
 
 Request _requestFromJson(Map<String, dynamic> json) {
   return Request(
-    title: json['title'] as String,
-    description: json['description'] as String,
-    category: json['category'] as String,
-    username: json['username'] as String,
-    date: json['date'] as String
+      title: json['title'] as String,
+      description: json['description'] as String,
+      category: json['category'] as String,
+      username: json['username'] as String,
+      date: json['date'] as String
     //date: (json['date'] as Timestamp).toDate()
   );
 }

@@ -11,7 +11,7 @@ class RequestCard extends StatelessWidget {
   final TextStyle boldStyle;
 
   const RequestCard({Key? key, required this.request, required this.boldStyle}) :
-      super(key: key);
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,48 +23,48 @@ class RequestCard extends StatelessWidget {
         );
       },
       child: Card(
-        child: Row(
-          children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(
-                Icons.account_circle,
-                size: 75
-              ),
-            ),
-
-            Flexible (
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 8.0,
-                  horizontal: 12.0),
-                child: Column (
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget> [
-                    Text(
-                        request.title,
-                        style: boldStyle,
-                        overflow: TextOverflow.ellipsis
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                        request.description,
-                        overflow: TextOverflow.ellipsis,
-                    ),
-                  ]
+          child: Row(
+              children: <Widget>[
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                      Icons.account_circle,
+                      size: 75
+                  ),
                 ),
-              ),
-            ),
-            
-            //_buildDeleteButton() // NEW ADDITION
-            
-          ]
-        )
+
+                Flexible (
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8.0,
+                        horizontal: 12.0),
+                    child: Column (
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget> [
+                          Text(
+                              request.title,
+                              style: boldStyle,
+                              overflow: TextOverflow.ellipsis
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            request.description,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ]
+                    ),
+                  ),
+                ),
+
+                //_buildDeleteButton() // NEW ADDITION
+
+              ]
+          )
       ),
     );
   }
 
-  /*Widget _buildDeleteButton() {
+/*Widget _buildDeleteButton() {
     // NEW ADDITION
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     return Padding(
@@ -78,7 +78,6 @@ class RequestCard extends StatelessWidget {
           }
         ),
         onTap: () {
-
         }
       ),
     );
