@@ -15,13 +15,70 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  static const emailSnackBar = SnackBar(
+    content: Text(
+      "Error: Please enter an email address",
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    ),
+    backgroundColor: Colors.red,
+  );
+
+  static const passwordSnackBar = SnackBar(
+    content: Text(
+      "Error: Please enter a password",
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    ),
+    backgroundColor: Colors.red,
+  );
+
+  static const noUserSnackBar = SnackBar(
+    content: Text(
+      "Error: No user found for that email",
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    ),
+    backgroundColor: Colors.red,
+  );
+
+  static const wrongPasswordSnackBar = SnackBar(
+    content: Text(
+      "Error: Invalid password",
+      style: TextStyle(
+        color: Colors.white,
+      ),
+    ),
+    backgroundColor: Colors.red,
+  );
+
   Future signIn() async {
-    await FirebaseAuth
-        .instance
-        .signInWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim()
-    );
+    if (_emailController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(emailSnackBar);
+    }
+
+    else if (_passwordController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(passwordSnackBar);
+    }
+
+    else {
+      try {
+        UserCredential cred =  await FirebaseAuth
+            .instance
+            .signInWithEmailAndPassword(
+            email: _emailController.text.trim(),
+            password: _passwordController.text.trim());
+      } on FirebaseAuthException catch (e) {
+        if (e.code == "user-not-found") {
+          ScaffoldMessenger.of(context).showSnackBar(noUserSnackBar);
+        } else if (e.code == "wrong-password") {
+          ScaffoldMessenger.of(context).showSnackBar(wrongPasswordSnackBar);
+        }
+      }
+    }
   }
 
   @override
@@ -48,10 +105,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   // Spacer box
-                  SizedBox(height: 50),
+                  const SizedBox(height: 50),
 
                   // Login to STORM
-                  Text(
+                  const Text(
                     "Login to STORM",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
@@ -60,10 +117,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   // Spacer box
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Please enter your login information
-                  Text(
+                  const Text(
                     "Please enter your login information",
                     style: TextStyle(
                       fontSize: 16,
@@ -71,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   // Spacer box
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
 
                   // Email box
                   Padding(
@@ -80,11 +137,11 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _emailController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
+                          borderSide: const BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.indigo),
+                          borderSide: const BorderSide(color: Colors.indigo),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         hintText: "Email",
@@ -95,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   // Spacer box
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Password box
                   Padding(
@@ -104,11 +161,11 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _passwordController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white),
+                          borderSide: const BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.indigo),
+                          borderSide: const BorderSide(color: Colors.indigo),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         hintText: "Password",
@@ -119,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   // Spacer box
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   // Sign In Button
                   Padding(
@@ -127,13 +184,13 @@ class _LoginPageState extends State<LoginPage> {
                     child: GestureDetector(
                       onTap: signIn, // to implement
                       child: Container(
-                        padding: EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
                           color: Colors.indigo,
                           borderRadius: BorderRadius.circular(12),
                         ),
 
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             "Sign In",
                             style: TextStyle(
@@ -148,14 +205,14 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   // Spacer box
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                   // New to STORM? Register now.
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // New to STORM?
-                      Text(
+                      const Text(
                         "New to STORM? ",
                         style: TextStyle(
                           fontSize: 12,
@@ -165,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
 
                       // Register now
                       GestureDetector(
-                          child: Text(
+                          child: const Text(
                             "Register now.",
                             style: TextStyle(
                               color: Colors.blue,
@@ -184,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   // Spacer box
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
                 ]
             ),

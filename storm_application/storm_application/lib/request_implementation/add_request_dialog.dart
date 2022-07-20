@@ -67,7 +67,7 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
 
             const Text("Request Type:"),
 
-           const SizedBox(height: 10),
+            const SizedBox(height: 10),
 
             RadioListTile(
               title: const Text('Tech'),
@@ -126,7 +126,40 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
 
         TextButton(
           onPressed: () {
-            if (requestTitle != null && requestDescription != null && requestType != null) {
+            if (requestTitle == null) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const AlertDialog(
+                      content: Text("Error: Please enter a title for your request.", style: TextStyle(color: Colors.red)),
+                    );
+                  }
+              );
+            }
+
+            else if (requestDescription == null) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const AlertDialog(
+                      content: Text("Error: Please enter a description of your request.", style: TextStyle(color: Colors.red)),
+                    );
+                  }
+              );
+            }
+
+            else if (requestType == null) {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const AlertDialog(
+                      content: Text("Error: Please select a category for your request.", style: TextStyle(color: Colors.red)),
+                    );
+                  }
+              );
+            }
+
+            else {
               final req = Request(
                   title: requestTitle!,
                   description: requestDescription!,
@@ -135,7 +168,18 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
                   date: requestDate!);
               repository.addRequest(req);
               Navigator.of(context).pop();
+
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const AlertDialog(
+                      content: Text("Success! Your request has been posted.", style: TextStyle(color: Colors.green)),
+                    );
+                  }
+              );
+
             }
+
           },
           child: const Text("Add"))
       ]
