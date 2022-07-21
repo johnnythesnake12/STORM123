@@ -177,7 +177,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
-                      key: const ValueKey("firstnamefield"),
                       controller: _firstNameController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
@@ -201,7 +200,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
-                      key: const ValueKey("lastnamefield"),
                       controller: _lastNameController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
@@ -226,7 +224,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
-                      key: const ValueKey("emailfield"),
                       controller: _emailController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
@@ -251,7 +248,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
-                      key: const ValueKey("passwordfield"),
                       controller: _passwordController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
@@ -276,7 +272,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
-                      key: const ValueKey('confirmpasswordfield'),
                       controller: _passwordConfirmController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
@@ -301,7 +296,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: GestureDetector(
-                      key: const ValueKey("signUpButton"),
                       onTap: signUp,
                       child: Container(
                         padding: const EdgeInsets.all(20),

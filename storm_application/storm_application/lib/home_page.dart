@@ -26,17 +26,17 @@ class _HomePageState extends State<HomePage> {
             // Home screen
             Flexible(
               child: FutureBuilder<DocumentSnapshot>(
-                  future: users.doc(FirebaseAuth.instance.currentUser?.uid).get(),
+                future: users.doc(FirebaseAuth.instance.currentUser?.uid).get(),
                   builder: (
                       BuildContext context,
                       AsyncSnapshot<DocumentSnapshot> snapshot) {
-                    Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-                    return Text("Welcome, ${data['firstName']} ${data['lastName']}!",
-                        style: const TextStyle(
+                        Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+                        return Text("Welcome, ${data['firstName']} ${data['lastName']}!",
+                          style: const TextStyle(
                             fontWeight:FontWeight.bold,
                             fontSize: 28
-                        ));
-                  }
+                          ));
+                      }
               ),
             ),
 
@@ -50,7 +50,6 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 30),
 
             MaterialButton(
-              key: const ValueKey("RequestPage"),
               onPressed: () {
                 Navigator.push(
                   context,

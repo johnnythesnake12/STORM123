@@ -28,19 +28,19 @@ class _RequestPageState extends State<RequestPage> {
         title:const Text("Request List"),
       ),
       body: StreamBuilder<QuerySnapshot>(
-          stream: repository.getStream(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) return const LinearProgressIndicator();
-            return _buildList(context, snapshot.data?.docs ?? []);
-          }
+        stream: repository.getStream(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return const LinearProgressIndicator();
+          return _buildList(context, snapshot.data?.docs ?? []);
+        }
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.indigo,
-          onPressed: () {
-            _addRequest();
-          },
-          tooltip: "Add Request",
-          child: const Icon(Icons.add)
+        backgroundColor: Colors.indigo,
+        onPressed: () {
+          _addRequest();
+        },
+        tooltip: "Add Request",
+        child: const Icon(Icons.add)
       ),
     );
   }
