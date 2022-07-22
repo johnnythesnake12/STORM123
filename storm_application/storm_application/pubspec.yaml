@@ -27,8 +27,6 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  integration_test:
-    sdk: flutter
   flutter:
     sdk: flutter
 
@@ -41,7 +39,6 @@ dependencies:
   firebase_auth: ^3.3.14
   flutter_firebase_chat_core: ^1.6.2
   flutter_chat_ui: ^1.6.2
-  email_auth: ^1.0.0
 
 dev_dependencies:
   flutter_test:

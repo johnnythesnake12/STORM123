@@ -2,7 +2,6 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:email_auth/email_auth.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key ? key}) : super(key: key);
@@ -17,9 +16,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _lastNameController = TextEditingController();
   final _passwordController= TextEditingController();
   final _passwordConfirmController = TextEditingController();
-  final _otpController = TextEditingController();
-
-  bool isVerified = false;
 
   static const firstNameSnackBar = SnackBar(
     content: Text(
@@ -81,19 +77,17 @@ class _RegisterPageState extends State<RegisterPage> {
     backgroundColor: Colors.red,
   );
 
-  static const emailAlreadyExistsSnackBar = SnackBar(
+  static const signupSuccessSnackBar = SnackBar(
     content: Text(
-      "Error: Email address already in use.",
+      "Successfully signed up! You are now logged in.",
       style: TextStyle(
         color: Colors.white,
       ),
     ),
-    backgroundColor: Colors.red,
+    backgroundColor: Colors.green,
   );
 
   Future signUp() async {
-    List<Widget> otpWidgetList = [];
-
     if (_firstNameController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(firstNameSnackBar);
     }
@@ -119,171 +113,21 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     else {
-      //new
-      var list = await FirebaseAuth.instance.fetchSignInMethodsForEmail(_emailController.text.trim());
+      var credential = await FirebaseAuth
+          .instance
+          .createUserWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim());
 
-      if (list.isEmpty) {
-          //initialise emailAUth
-          EmailAuth emailAuth = EmailAuth(sessionName: "Sample Session");
-          
-          //send OTP to given email
-          emailAuth.sendOtp(
-              recipientMail: _emailController.text.trim(),
-              otpLength: 5
-          );
+      await FirebaseChatCore.instance.createUserInFirestore(
+        types.User(
+            firstName: _firstNameController.text.trim(),
+            lastName: _lastNameController.text.trim(),
+            id: credential.user!.uid
+        ),
+      );
 
-          //defining verify(), which required emailAuth to be initialised first
-          Future<void> verify() async {
-            isVerified = emailAuth.validateOtp(
-                recipientMail: _emailController.text.trim(),
-                userOtp: _otpController.text.trim()
-            );
-
-            if (isVerified) {
-              Navigator.of(context, rootNavigator: true).pop();
-
-              showDialog(
-                  barrierDismissible: false,
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const AlertDialog(
-                      title: Text("Success!", style: TextStyle(color: Colors.green)),
-                      content: Text("You will automatically be brought to the home page in a moment..."),
-                    );
-                  }
-              );
-
-              var credential = await FirebaseAuth
-                  .instance
-                  .createUserWithEmailAndPassword(
-                  email: _emailController.text.trim(),
-                  password: _passwordController.text.trim());
-
-              await FirebaseChatCore.instance.createUserInFirestore(
-                types.User(
-                    firstName: _firstNameController.text.trim(),
-                    lastName: _lastNameController.text.trim(),
-                    id: credential.user!.uid
-                ),
-              );
-
-              await Future.delayed(const Duration(seconds: 3));
-
-              Navigator.of(context, rootNavigator: true).pop();
-              Navigator.pop(context);
-
-              //ScaffoldMessenger.of(context).showSnackBar(signupSuccessSnackBar);
-            }
-
-            else {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const AlertDialog(
-                        title: Center(child: Text("Incorrect OTP", style: TextStyle(color: Colors.red)))
-                    );
-                  }
-              );
-            }
-          }
-
-          // show OTP dialog
-          showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (BuildContext context) {
-
-                otpWidgetList = [
-                  const Text("(Note: Check your spam/junk folder if you do not see the OTP in your inbox.)"),
-
-                  const SizedBox(height: 20),
-                  // Enter OTP
-                  TextField(
-                    controller: _otpController,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.white),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.indigo),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      hintText: "Enter OTP",
-                      fillColor: Colors.grey[200],
-                      filled: true,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  // Submit OTP button
-                  GestureDetector(
-                    onTap: verify,
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.indigo,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-
-                      child: const Center(
-                        child: Text(
-                          "Submit OTP",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 5),
-
-                  GestureDetector(
-                    onTap: Navigator.of(context, rootNavigator: true).pop,
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-
-                      child: const Center(
-                        child: Text(
-                          "Cancel",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  const Text("Cancelling signup will invalidate current OTP", style: TextStyle(fontSize: 12),)
-
-                ];
-
-                AlertDialog otpDialog =  AlertDialog(
-                  title: const Text("Please enter the OTP sent to the email address you provided."),
-                  content: SingleChildScrollView(
-                      child: Column(children: otpWidgetList,)
-                  ),
-                );
-
-                return otpDialog;
-              }
-          );
-        }
-        
-        else {
-          ScaffoldMessenger.of(context).showSnackBar(emailAlreadyExistsSnackBar);
-        }
+      ScaffoldMessenger.of(context).showSnackBar(signupSuccessSnackBar);
     }
   }
 
@@ -294,7 +138,6 @@ class _RegisterPageState extends State<RegisterPage> {
     _lastNameController.dispose();
     _passwordController.dispose();
     _passwordConfirmController.dispose();
-    _otpController.dispose();
     super.dispose();
   }
 
@@ -334,7 +177,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
-                      key: const ValueKey("firstnamefield"),
                       controller: _firstNameController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
@@ -358,7 +200,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
-                      key: const ValueKey("lastnamefield"),
                       controller: _lastNameController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
@@ -383,7 +224,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
-                      key: const ValueKey("emailfield"),
                       controller: _emailController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
@@ -408,7 +248,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
-                      key: const ValueKey("passwordfield"),
                       controller: _passwordController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
@@ -433,7 +272,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: TextField(
-                      key: const ValueKey('confirmpasswordfield'),
                       controller: _passwordConfirmController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
@@ -458,7 +296,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
                     child: GestureDetector(
-                      key: const ValueKey("signUpButton"),
                       onTap: signUp,
                       child: Container(
                         padding: const EdgeInsets.all(20),
