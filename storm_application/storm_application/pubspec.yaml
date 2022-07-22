@@ -39,6 +39,7 @@ dependencies:
   firebase_auth: ^3.3.14
   flutter_firebase_chat_core: ^1.6.2
   flutter_chat_ui: ^1.6.2
+  email_auth: ^1.0.0
 
 dev_dependencies:
   flutter_test:
