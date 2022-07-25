@@ -24,7 +24,7 @@ class _OfferPageState extends State<OfferPage> {
   Widget _buildOfferList(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.blue,
         title:const Text("Offer List"),
       ),
       body: StreamBuilder<QuerySnapshot>(

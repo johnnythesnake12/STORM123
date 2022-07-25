@@ -6,6 +6,8 @@ class Request {
   String category;
   String username;
   String date;
+  //bool isAccepted;
+
   String? referenceId;
 
   Request(
@@ -13,6 +15,7 @@ class Request {
       required this.description,
       required this.category,
       required this.username,
+      //required this.isAccepted,
       this.referenceId,
       required this.date});
 
@@ -36,8 +39,8 @@ Request _requestFromJson(Map<String, dynamic> json) {
     description: json['description'] as String,
     category: json['category'] as String,
     username: json['username'] as String,
-    date: json['date'] as String
-    //date: (json['date'] as Timestamp).toDate()
+    //isAccepted: json['isAccepted'] as bool,
+    date: json['date'] as String,
   );
 }
 
@@ -48,4 +51,5 @@ Map<String, dynamic> _requestToJson(Request instance) =>
       'category' : instance.category,
       'username' : instance.username,
       'date': instance.date,
+      //'isAccepted' : instance.isAccepted
     };

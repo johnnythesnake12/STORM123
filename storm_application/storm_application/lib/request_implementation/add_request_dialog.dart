@@ -17,6 +17,7 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
   String? requestType;
   String? requestDate = DateTime.now().toString();
   String? requestUsername;
+  bool? requestIsAccepted = false;
 
   final RequestDataRepository repository = RequestDataRepository();
 
@@ -165,7 +166,9 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
                   description: requestDescription!,
                   category: requestType!,
                   username: requestUsername!,
-                  date: requestDate!);
+                  date: requestDate!,
+                  //isAccepted: requestIsAccepted!,
+              );
               repository.addRequest(req);
               Navigator.of(context).pop();
 

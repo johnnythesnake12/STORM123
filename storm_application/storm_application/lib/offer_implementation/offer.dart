@@ -14,7 +14,8 @@ class Offer {
         required this.category,
         required this.username,
         this.referenceId,
-        required this.date});
+        required this.date,
+      });
 
   factory Offer.fromSnapshot(DocumentSnapshot snapshot) {
     final newOffer = Offer.fromJson(snapshot.data() as Map<String, dynamic>);
@@ -36,8 +37,7 @@ Offer _offerFromJson(Map<String, dynamic> json) {
       description: json['description'] as String,
       category: json['category'] as String,
       username: json['username'] as String,
-      date: json['date'] as String
-    //date: (json['date'] as Timestamp).toDate()
+      date: json['date'] as String,
   );
 }
 
@@ -47,5 +47,5 @@ Map<String, dynamic> _offerToJson(Offer instance) =>
       'description' : instance.description,
       'category' : instance.category,
       'username' : instance.username,
-      'date': instance.date,
+      'date': instance.date
     };

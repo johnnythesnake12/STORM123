@@ -19,6 +19,7 @@ class _AddOfferDialogState extends State<AddOfferDialog> {
   String? offerType;
   String? offerDate = DateTime.now().toString();
   String? offerUsername;
+  bool offerIsAccepted = false;
 
   final OfferDataRepository repository = OfferDataRepository();
 
@@ -167,7 +168,8 @@ class _AddOfferDialogState extends State<AddOfferDialog> {
                       description: offerDescription!,
                       category: offerType!,
                       username: offerUsername!,
-                      date: offerDate!);
+                      date: offerDate!,
+                  );
                   repository.addRequest(offer);
                   Navigator.of(context).pop();
 

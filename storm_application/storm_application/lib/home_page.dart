@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:storm_application/contacts_page.dart';
 import 'package:storm_application/offer_page.dart';
 import 'package:storm_application/request_page.dart';
+import 'package:storm_application/review_options_page.dart';
+import 'package:storm_application/misc/review_page.dart';
+import 'package:storm_application/review_user_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -89,6 +92,21 @@ class _HomePageState extends State<HomePage> {
               },
               color: Colors.green,
               child: const Text("Contacts Page",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+
+            MaterialButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ReviewOptionsPage()),
+                );
+              },
+              color: Colors.deepOrangeAccent,
+              child: const Text("Review Options",
                 style: TextStyle(
                   color: Colors.white,
                 ),
