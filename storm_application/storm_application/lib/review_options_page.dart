@@ -1,10 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:storm_application/contacts_page.dart';
-import 'package:storm_application/offer_page.dart';
-import 'package:storm_application/request_page.dart';
-import 'package:storm_application/misc/review_page.dart';
 import 'package:storm_application/review_user_page.dart';
 import 'package:storm_application/view_all_reviews.dart';
 

@@ -6,8 +6,16 @@ class RequestDataRepository {
   final CollectionReference collection =
   FirebaseFirestore.instance.collection('Active Requests');
 
-  Stream<QuerySnapshot> getStream() {
-    return collection.snapshots();
+  Stream<QuerySnapshot> getStream(String categoryKeyword, String usernameKeyword) {
+    if (categoryKeyword == "" && usernameKeyword == "") {
+      return collection.orderBy("date", descending: true).snapshots();
+    }
+
+    else if (usernameKeyword == "") {
+      return collection.where("category", isEqualTo: categoryKeyword).snapshots();
+    }
+
+    return collection.where("username", isEqualTo: usernameKeyword).snapshots();
   }
 
   Future<DocumentReference> addRequest(Request request) {

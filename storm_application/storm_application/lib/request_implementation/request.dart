@@ -6,7 +6,6 @@ class Request {
   String category;
   String username;
   String date;
-  //bool isAccepted;
 
   String? referenceId;
 
@@ -15,7 +14,6 @@ class Request {
       required this.description,
       required this.category,
       required this.username,
-      //required this.isAccepted,
       this.referenceId,
       required this.date});
 

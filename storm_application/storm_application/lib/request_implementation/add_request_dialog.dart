@@ -17,7 +17,6 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
   String? requestType;
   String? requestDate = DateTime.now().toString();
   String? requestUsername;
-  bool? requestIsAccepted = false;
 
   final RequestDataRepository repository = RequestDataRepository();
 
@@ -46,6 +45,7 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
         child: ListBody(
           children: <Widget> [
             TextField(
+              key: const ValueKey("requestTitle"),
               autofocus: true,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(), hintText: "Request Title"),
@@ -55,6 +55,7 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
             const SizedBox(height: 10),
 
             TextField(
+              key: const ValueKey("requestDescription"),
               autofocus: true,
               keyboardType: TextInputType.multiline,
               minLines: 5,
@@ -72,6 +73,7 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
 
             RadioListTile(
               title: const Text('Tech'),
+              key: const ValueKey("Tech"),
               value: 'Tech',
               groupValue: requestType,
               onChanged: (value) {
@@ -101,8 +103,8 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
               },
             ),
             RadioListTile(
-              title: const Text('Other'),
-              value: 'other',
+              title: const Text('Others'),
+              value: 'Others',
               groupValue: requestType,
               onChanged: (value) {
                 setState(() {
@@ -126,6 +128,7 @@ class _AddRequestDialogState extends State<AddRequestDialog> {
         ),
 
         TextButton(
+          key: const ValueKey("Add"),
           onPressed: () {
             if (requestTitle == null) {
               showDialog(

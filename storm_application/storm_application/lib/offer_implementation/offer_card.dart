@@ -11,6 +11,15 @@ class OfferCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MaterialColor colorSelector(String category) {
+      Map colorPalette =
+      {"Tech" : Colors.red,
+        "Delivery" : Colors.green,
+        "Errands" : Colors.blue,
+        "Others" : Colors.indigo};
+      return colorPalette[category]!;
+    }
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -19,8 +28,11 @@ class OfferCard extends StatelessWidget {
         );
       },
       child: Card(
+          shape: Border(left: BorderSide(color: colorSelector(offer.category), width: 5)),
           child: Row(
               children: <Widget>[
+                const SizedBox(width: 10.0),
+
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Icon(
@@ -50,10 +62,33 @@ class OfferCard extends StatelessWidget {
                         ]
                     ),
                   ),
-                )
+                ),
+
+                //_buildDeleteButton() // NEW ADDITION
+
               ]
           )
       ),
     );
   }
+
+/*Widget _buildDeleteButton() {
+    // NEW ADDITION
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: GestureDetector(
+        child: FutureBuilder<DocumentSnapshot>(
+          future: users.doc(FirebaseAuth.instance.currentUser?.uid).get(),
+          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
+            return const Icon(Icons.delete, color: Colors.red);
+          }
+        ),
+        onTap: () {
+
+        }
+      ),
+    );
+  }*/
 }

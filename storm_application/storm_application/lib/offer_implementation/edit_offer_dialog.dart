@@ -1,56 +1,43 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:storm_application/offer_implementation/offer_data_repository.dart';
 import 'package:storm_application/offer_implementation/offer.dart';
 
-class AddOfferDialog extends StatefulWidget {
-  const AddOfferDialog({Key? key}) : super(key: key);
+class EditOfferDialog extends StatefulWidget {
+  final Offer offer;
+  const EditOfferDialog({Key? key, required this.offer}) : super(key: key);
 
   @override
-  _AddOfferDialogState createState() => _AddOfferDialogState();
+  _EditOfferDialogState createState() => _EditOfferDialogState();
 }
 
-class _AddOfferDialogState extends State<AddOfferDialog> {
-  String? offerTitle;
-  String? offerDescription;
-  String? offerType;
-  String? offerDate = DateTime.now().toString();
-  String? offerUsername;
-
+class _EditOfferDialogState extends State<EditOfferDialog> {
   final OfferDataRepository repository = OfferDataRepository();
+  String dropdownValue = "Tech";
 
   @override
   Widget build(BuildContext context) {
-
-    CollectionReference users = FirebaseFirestore.instance.collection('users');
-
-    FutureBuilder<DocumentSnapshot> futureBuilder = FutureBuilder<DocumentSnapshot>(
-        future: users.doc(FirebaseAuth.instance.currentUser?.uid).get(),
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          Map<String, dynamic> data = snapshot.data!.data() as Map<String, dynamic>;
-          offerUsername = "${data['firstName']} ${data['lastName']}";
-          return Container(width: 285);
-        }
-    );
+    String offerTitle = widget.offer.title;
+    String offerDescription = widget.offer.description;
+    String offerType = widget.offer.category;
 
     return AlertDialog(
-        title: const Text("Add Offer"),
+        title: const Text("Edit Offer"),
         content: SingleChildScrollView(
             child: ListBody(
                 children: <Widget> [
-                  TextField(
+                  TextFormField(
                     key: const ValueKey("offerTitle"),
                     autofocus: true,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(), hintText: "Offer Title"),
+                    initialValue: offerTitle,
                     onChanged: (text) => offerTitle = text,
                   ),
 
                   const SizedBox(height: 10),
 
-                  TextField(
+                  TextFormField(
                     key: const ValueKey("offerDescription"),
                     autofocus: true,
                     keyboardType: TextInputType.multiline,
@@ -58,6 +45,7 @@ class _AddOfferDialogState extends State<AddOfferDialog> {
                     maxLines: null,
                     decoration: const InputDecoration(
                         border: OutlineInputBorder(), hintText: "Offer Description"),
+                    initialValue: offerDescription,
                     onChanged: (text) => offerDescription = text,
                   ),
 
@@ -71,45 +59,51 @@ class _AddOfferDialogState extends State<AddOfferDialog> {
                     title: const Text('Tech'),
                     key: const ValueKey("Tech"),
                     value: 'Tech',
-                    groupValue: offerType,
+                    groupValue: dropdownValue,
                     onChanged: (value) {
-                      setState(() {
-                        offerType = value as String;
-                      });
+                      dropdownValue = value as String;
+                      offerType = dropdownValue;
+                      //setState(() {
+                      //  dropdownValue = value;
+                      //});
                     },
                   ),
                   RadioListTile(
                     title: const Text('Delivery'),
                     value: 'Delivery',
-                    groupValue: offerType,
+                    groupValue: dropdownValue,
                     onChanged: (value) {
-                      setState(() {
-                        offerType = (value ?? '') as String;
-                      });
+                      dropdownValue = value as String;
+                      offerType = dropdownValue;
+                      //setState(() {
+                      //  dropdownValue = value;
+                      //});
                     },
                   ),
                   RadioListTile(
                     title: const Text('Errands'),
                     value: 'Errands',
-                    groupValue: offerType,
+                    groupValue: dropdownValue,
                     onChanged: (value) {
-                      setState(() {
-                        offerType = (value ?? '') as String;
-                      });
+                      dropdownValue = value as String;
+                      offerType = dropdownValue;
+                      //setState(() {
+                      //  dropdownValue = value;
+                      //});
                     },
                   ),
                   RadioListTile(
                     title: const Text('Others'),
                     value: 'Others',
-                    groupValue: offerType,
+                    groupValue: dropdownValue,
                     onChanged: (value) {
-                      setState(() {
-                        offerType = (value ?? '') as String;
-                      });
+                      dropdownValue = value as String;
+                      offerType = dropdownValue;
+                      //setState(() {
+                      //  dropdownValue = value;
+                      //});
                     },
                   ),
-
-                  futureBuilder
 
                 ]
             )
@@ -148,33 +142,21 @@ class _AddOfferDialogState extends State<AddOfferDialog> {
                   );
                 }
 
-                else if (offerType == null) {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const AlertDialog(
-                          content: Text("Error: Please select a category for your offer.", style: TextStyle(color: Colors.red)),
-                        );
-                      }
-                  );
-                }
-
                 else {
-                  final offer = Offer(
-                    title: offerTitle!,
-                    description: offerDescription!,
-                    category: offerType!,
-                    username: offerUsername!,
-                    date: offerDate!,
-                  );
-                  repository.addOffer(offer);
-                  Navigator.of(context).pop();
+                  FirebaseFirestore
+                      .instance
+                      .collection('Active Offers')
+                      .doc(widget.offer.referenceId)
+                      .update({"title" : offerTitle, "description" : offerDescription, "category" : offerType});
+
+                  Navigator.pop(context);
+                  Navigator.pop(context);
 
                   showDialog(
                       context: context,
                       builder: (BuildContext context) {
                         return const AlertDialog(
-                          content: Text("Success! Your offer has been posted.", style: TextStyle(color: Colors.green)),
+                          content: Text("Success! Your offer has been edited.", style: TextStyle(color: Colors.green)),
                         );
                       }
                   );
@@ -182,7 +164,7 @@ class _AddOfferDialogState extends State<AddOfferDialog> {
                 }
 
               },
-              child: const Text("Add"))
+              child: const Text("Confirm Edit"))
         ]
     );
   }

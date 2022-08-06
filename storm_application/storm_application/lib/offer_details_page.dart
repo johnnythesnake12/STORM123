@@ -3,11 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:storm_application/contacts_page.dart';
+import 'package:storm_application/offer_implementation/edit_offer_dialog.dart';
 import 'package:storm_application/offer_implementation/offer_data_repository.dart';
 import 'package:storm_application/offer_implementation/offer.dart';
 import 'package:flutter/material.dart';
-
-import 'chat_details_page.dart';
 
 class OfferDetailsPage extends StatefulWidget {
   final Offer offer;
@@ -19,16 +18,24 @@ class OfferDetailsPage extends StatefulWidget {
 
 class _OfferDetailsPage extends State<OfferDetailsPage> {
   final OfferDataRepository repository = OfferDataRepository();
+  String _currentUserName = "";
 
   @override
   Widget build(BuildContext context) {
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    users.doc(FirebaseAuth.instance.currentUser!.uid).get().then((DocumentSnapshot ds) {
+      setState(() {
+        _currentUserName = ds.get("firstName") + " " + ds.get("lastName");
+      });
+    });
+
     return Scaffold(
-        body: StreamBuilder<List<types.User>>(
+        body: StreamBuilder<List<types.User>> (
             stream: FirebaseChatCore.instance.users(),
             initialData: const [],
             builder: (context, snapshot) {
               return Padding(
-                padding: const EdgeInsets.only(top: 50.0),
+                padding: const EdgeInsets.only(top : 50.0),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -53,6 +60,36 @@ class _OfferDetailsPage extends State<OfferDetailsPage> {
                       Text("By User: " + widget.offer.username),
 
                       // Spacer box
+                      const SizedBox(height: 20),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                            children: const [
+                              Flexible(
+                                  child: Text("Offer Type:",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold
+                                      )
+                                  )
+                              )
+                            ]
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Row(
+                            children: [
+                              Flexible(
+                                  child: Text(widget.offer.category)
+                              )
+                            ]
+                        ),
+                      ),
+
                       const SizedBox(height: 20),
 
                       Padding(
@@ -105,6 +142,81 @@ class _OfferDetailsPage extends State<OfferDetailsPage> {
 
                       _buildButton(snapshot),
 
+                      (widget.offer.username == _currentUserName) ?
+                      MaterialButton(
+                          color: Colors.orange,
+                          child: const Text("Edit Offer", style: TextStyle(color: Colors.white)),
+                          onPressed: () {
+                            showDialog<Widget>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return EditOfferDialog(offer: widget.offer);
+                              },
+                            );
+                          }
+                      )
+                          : const SizedBox.shrink(),
+
+                      (widget.offer.username == _currentUserName) ?
+                      MaterialButton(
+                        onPressed: () {
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Are you sure you want to delete your post?"),
+                                  content: SingleChildScrollView(
+                                      child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            MaterialButton(
+                                                color: Colors.red,
+                                                child: const Text("Yes", style: TextStyle(color: Colors.white, fontSize: 16.0)),
+                                                onPressed: () {
+                                                  repository.deleteOffer(widget.offer);
+
+                                                  Navigator.pop(context);
+                                                  Navigator.pop(context);
+
+                                                  showDialog(
+                                                      context: context,
+                                                      builder: (BuildContext context) {
+                                                        return const AlertDialog(
+                                                          title: Text("Success!", style: TextStyle(color: Colors.green)),
+                                                          content: Text("You have successfully deleted your post."),
+                                                        );
+                                                      }
+                                                  );
+
+                                                }
+                                            ),
+
+                                            const SizedBox(width: 20.0),
+
+                                            TextButton(
+                                                child: const Text("Cancel", style: TextStyle(color: Colors.grey, fontSize: 16.0)),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                }
+                                            )
+                                          ]
+                                      )
+                                  ),
+                                );
+                              }
+                          );
+                        },
+                        color: Colors.red,
+                        child: const Text("Delete Offer",
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      )
+
+                          : const SizedBox.shrink(),
+
                       MaterialButton(
                         onPressed: () {
                           Navigator.pop(context);
@@ -156,5 +268,4 @@ class _OfferDetailsPage extends State<OfferDetailsPage> {
         )
     );
   }
-
 }

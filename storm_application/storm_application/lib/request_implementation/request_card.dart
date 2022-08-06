@@ -1,10 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_firebase_chat_core/flutter_firebase_chat_core.dart';
 import 'package:storm_application/request_details_page.dart';
 import 'package:storm_application/request_implementation/request.dart';
-import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 
 class RequestCard extends StatelessWidget {
   final Request request;
@@ -15,6 +11,15 @@ class RequestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MaterialColor colorSelector(String category) {
+      Map colorPalette =
+        {"Tech" : Colors.red,
+        "Delivery" : Colors.green,
+        "Errands" : Colors.blue,
+        "Others" : Colors.indigo};
+      return colorPalette[category]!;
+    }
+
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -23,8 +28,11 @@ class RequestCard extends StatelessWidget {
         );
       },
       child: Card(
+        shape: Border(left: BorderSide(color: colorSelector(request.category), width: 5)),
         child: Row(
           children: <Widget>[
+            const SizedBox(width: 10.0),
+
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Icon(

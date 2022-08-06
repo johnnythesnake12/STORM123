@@ -5,8 +5,6 @@ import 'package:storm_application/contacts_page.dart';
 import 'package:storm_application/offer_page.dart';
 import 'package:storm_application/request_page.dart';
 import 'package:storm_application/review_options_page.dart';
-import 'package:storm_application/misc/review_page.dart';
-import 'package:storm_application/review_user_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
